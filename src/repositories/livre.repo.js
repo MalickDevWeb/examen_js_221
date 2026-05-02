@@ -1,17 +1,30 @@
 const BaseRepository = require('./BaseRepository');
-const Livre = require('../models/Livre');
+const { prisma } = require('../config/db');
 
 class LivreRepository extends BaseRepository {
   constructor() {
-    super(Livre);
+    super(prisma.livre);
   }
 
-  async findAll(filter = {}) {
-    return await super.findAll(filter, 'editeur');
+  async findByIsbn(isbn) {
+    return await this.model.findUnique({
+      where: { isbn },
+      include: { editeur: true }
+    });
   }
 
-  async findById(id) {
-    return await super.findById(id, 'editeur');
+  async incrementStock(id, quantity) {
+    return await this.model.update({
+      where: { id: parseInt(id) },
+      data: { stock: { increment: quantity } },
+    });
+  }
+
+  async decrementStock(id, quantity) {
+    return await this.model.update({
+      where: { id: parseInt(id) },
+      data: { stock: { decrement: quantity } },
+    });
   }
 }
 

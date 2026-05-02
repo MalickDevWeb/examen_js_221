@@ -1,17 +1,32 @@
 const BaseRepository = require('./BaseRepository');
-const Commande = require('../models/Commande');
+const { prisma } = require('../config/db');
 
 class CommandeRepository extends BaseRepository {
   constructor() {
-    super(Commande);
-  }
-
-  async findAll(filter = {}) {
-    return await super.findAll(filter, 'client livres.livre');
+    super(prisma.commande);
   }
 
   async findById(id) {
-    return await super.findById(id, 'client livres.livre');
+    return await this.model.findUnique({
+      where: { id: parseInt(id) },
+      include: {
+        client: true,
+        detailsCommande: {
+          include: { livre: true }
+        }
+      }
+    });
+  }
+
+  async findAllWithDetails() {
+    return await this.model.findMany({
+      include: {
+        client: true,
+        detailsCommande: {
+          include: { livre: true }
+        }
+      }
+    });
   }
 }
 

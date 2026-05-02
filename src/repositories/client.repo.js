@@ -1,9 +1,9 @@
 const BaseRepository = require('./BaseRepository');
-const Client = require('../models/Client');
+const { prisma } = require('../config/db');
 
 class ClientRepository extends BaseRepository {
   constructor() {
-    super(Client);
+    super(prisma.client);
   }
 }
 

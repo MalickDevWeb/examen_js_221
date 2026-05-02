@@ -1,20 +1,66 @@
 openapi: 3.0.0
 info:
-  title: API Gestion Approvisionnement
-  description: API pour la gestion des approvisionnements d'une boutique.
+  title: API Gestion Approvisionnement - ESP 221
+  description: API RESTful pour la gestion des approvisionnements d'une boutique (Fournisseurs, Produits, Approvisionnements).
   version: 1.0.0
 servers:
   - url: http://localhost:5000
     description: Serveur de développement
 
+tags:
+  - name: Authentification
+    description: Gestion des utilisateurs (Inscription/Connexion)
+  - name: Produits
+    description: Gestion des produits et du stock
+  - name: Fournisseurs
+    description: Gestion des fournisseurs
+  - name: Approvisionnements
+    description: Suivi des arrivages de produits
+
 paths:
+  # --- AUTH ---
+  /api/auth/register:
+    post:
+      tags: [Authentification]
+      summary: Inscription d'un nouvel utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nom: { type: string }
+                email: { type: string }
+                password: { type: string }
+      responses:
+        '201': { description: Utilisateur créé }
+
+  /api/auth/login:
+    post:
+      tags: [Authentification]
+      summary: Connexion utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string }
+                password: { type: string }
+      responses:
+        '200': { description: Succès }
+
+  # --- PRODUITS ---
   /api/produits:
     get:
+      tags: [Produits]
       summary: Liste tous les produits
       responses:
-        '200':
-          description: Succès
+        '200': { description: Succès }
     post:
+      tags: [Produits]
       summary: Ajouter un produit
       requestBody:
         content:
@@ -22,26 +68,101 @@ paths:
             schema:
               type: object
               properties:
-                libelle:
-                  type: string
-                prix:
-                  type: number
-                quantiteStock:
-                  type: number
-                image:
-                  type: string
-                  format: binary
+                libelle: { type: string }
+                prix: { type: number }
+                quantiteStock: { type: number }
+                image: { type: string, format: binary }
       responses:
-        '201':
-          description: Produit créé
+        '201': { description: Produit créé }
 
+  /api/produits/{id}:
+    get:
+      tags: [Produits]
+      summary: Détails d'un produit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: Succès }
+    put:
+      tags: [Produits]
+      summary: Modifier un produit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                libelle: { type: string }
+                prix: { type: number }
+                image: { type: string, format: binary }
+      responses:
+        '200': { description: Succès }
+    delete:
+      tags: [Produits]
+      summary: Supprimer un produit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: Succès }
+
+  /api/produits/{id}/increment:
+    patch:
+      tags: [Produits]
+      summary: Incrémenter manuellement le stock
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity: { type: integer }
+      responses:
+        '200': { description: Stock mis à jour }
+
+  /api/produits/{id}/decrement:
+    patch:
+      tags: [Produits]
+      summary: Décrémenter manuellement le stock
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity: { type: integer }
+      responses:
+        '200': { description: Stock mis à jour }
+
+  # --- FOURNISSEURS ---
   /api/fournisseurs:
     get:
+      tags: [Fournisseurs]
       summary: Liste tous les fournisseurs
       responses:
-        '200':
-          description: Succès
+        '200': { description: Succès }
     post:
+      tags: [Fournisseurs]
       summary: Ajouter un fournisseur
       requestBody:
         content:
@@ -49,44 +170,43 @@ paths:
             schema:
               type: object
               properties:
-                nom:
-                  type: string
-                adresse:
-                  type: string
-                telephone:
-                  type: string
-                email:
-                  type: string
+                nom: { type: string }
+                adresse: { type: string }
+                telephone: { type: string }
       responses:
-        '201':
-          description: Fournisseur créé
+        '201': { description: Fournisseur créé }
 
+  # --- APPROVISIONNEMENTS ---
   /api/approvisionnements:
     get:
+      tags: [Approvisionnements]
       summary: Liste tous les approvisionnements
       responses:
-        '200':
-          description: Succès
+        '200': { description: Succès }
     post:
+      tags: [Approvisionnements]
       summary: Enregistrer un nouvel approvisionnement
-      description: Incrémente automatiquement le stock des produits concernés.
+      description: Incrémente automatiquement le stock du produit.
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                fournisseur:
-                  type: string
-                produits:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      produit:
-                        type: string
-                      quantite:
-                        type: number
+                fournisseurId: { type: integer }
+                produitId: { type: integer }
+                quantite: { type: integer }
       responses:
-        '201':
-          description: Approvisionnement enregistré
+        '201': { description: Approvisionnement enregistré }
+
+  /api/approvisionnements/{id}:
+    delete:
+      tags: [Approvisionnements]
+      summary: Supprimer un approvisionnement (et restaurer le stock)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: Succès }

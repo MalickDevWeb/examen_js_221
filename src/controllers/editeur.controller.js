@@ -4,7 +4,7 @@ const { sendResponse } = require('../utils/response');
 const getAllEditeurs = async (req, res, next) => {
   try {
     const editeurs = await editeurService.getAllEditeurs();
-    sendResponse(res, 200, editeurs, 'Editeurs retrieved successfully');
+    sendResponse(res, 200, editeurs, 'Éditeurs récupérés');
   } catch (error) {
     next(error);
   }
@@ -13,8 +13,8 @@ const getAllEditeurs = async (req, res, next) => {
 const getEditeurById = async (req, res, next) => {
   try {
     const editeur = await editeurService.getEditeurById(req.params.id);
-    if (!editeur) return sendResponse(res, 404, null, 'Editeur not found');
-    sendResponse(res, 200, editeur, 'Editeur retrieved successfully');
+    if (!editeur) return sendResponse(res, 404, null, 'Éditeur non trouvé');
+    sendResponse(res, 200, editeur, 'Éditeur récupéré');
   } catch (error) {
     next(error);
   }
@@ -23,7 +23,7 @@ const getEditeurById = async (req, res, next) => {
 const createEditeur = async (req, res, next) => {
   try {
     const editeur = await editeurService.createEditeur(req.body);
-    sendResponse(res, 201, editeur, 'Editeur created successfully');
+    sendResponse(res, 201, editeur, 'Éditeur créé');
   } catch (error) {
     next(error);
   }
@@ -32,8 +32,7 @@ const createEditeur = async (req, res, next) => {
 const updateEditeur = async (req, res, next) => {
   try {
     const editeur = await editeurService.updateEditeur(req.params.id, req.body);
-    if (!editeur) return sendResponse(res, 404, null, 'Editeur not found');
-    sendResponse(res, 200, editeur, 'Editeur updated successfully');
+    sendResponse(res, 200, editeur, 'Éditeur mis à jour');
   } catch (error) {
     next(error);
   }
@@ -41,9 +40,8 @@ const updateEditeur = async (req, res, next) => {
 
 const deleteEditeur = async (req, res, next) => {
   try {
-    const editeur = await editeurService.deleteEditeur(req.params.id);
-    if (!editeur) return sendResponse(res, 404, null, 'Editeur not found');
-    sendResponse(res, 200, null, 'Editeur deleted successfully');
+    await editeurService.deleteEditeur(req.params.id);
+    sendResponse(res, 200, null, 'Éditeur supprimé');
   } catch (error) {
     next(error);
   }

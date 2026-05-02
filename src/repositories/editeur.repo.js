@@ -1,9 +1,9 @@
 const BaseRepository = require('./BaseRepository');
-const Editeur = require('../models/Editeur');
+const { prisma } = require('../config/db');
 
 class EditeurRepository extends BaseRepository {
   constructor() {
-    super(Editeur);
+    super(prisma.editeur);
   }
 }
 

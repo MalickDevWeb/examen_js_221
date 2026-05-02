@@ -21,7 +21,7 @@ app.use('/api', routes);
 
 // Home Route
 app.get('/', (req, res) => {
-  res.send('Bookstore API is running...');
+  res.send('Supply Management API is running...');
 });
 
 // 404 Not Found

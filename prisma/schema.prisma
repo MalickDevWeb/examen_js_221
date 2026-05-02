@@ -51,3 +51,62 @@ model Approvisionnement {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }
+
+model Editeur {
+  id        Int      @id @default(autoincrement())
+  nom       String
+  email     String   @unique
+  adresse   String?
+  telephone String?
+  livres    Livre[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Livre {
+  id              Int              @id @default(autoincrement())
+  titre           String
+  isbn            String           @unique
+  prix            Float
+  stock           Int              @default(0)
+  image           String?
+  editeur         Editeur          @relation(fields: [editeurId], references: [id])
+  editeurId       Int
+  detailsCommande DetailCommande[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model Client {
+  id        Int        @id @default(autoincrement())
+  nom       String
+  email     String     @unique
+  telephone String?
+  adresse   String?
+  commandes Commande[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Commande {
+  id              Int              @id @default(autoincrement())
+  date            DateTime         @default(now())
+  client          Client           @relation(fields: [clientId], references: [id])
+  clientId        Int
+  detailsCommande DetailCommande[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model DetailCommande {
+  id         Int      @id @default(autoincrement())
+  quantite   Int
+  prix       Float
+  commande   Commande @relation(fields: [commandeId], references: [id], onDelete: Cascade)
+  commandeId Int
+  livre      Livre    @relation(fields: [livreId], references: [id])
+  livreId    Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+

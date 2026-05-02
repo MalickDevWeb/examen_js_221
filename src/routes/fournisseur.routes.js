@@ -1,45 +1,39 @@
 const express = require('express');
 const router = express.Router();
-const {
-  getAllClients,
-  getClientById,
-  createClient,
-  updateClient,
-  deleteClient,
-} = require('../controllers/client.controller');
+const fournisseurController = require('../controllers/fournisseur.controller');
 const validate = require('../middlewares/validate');
-const clientSchema = require('../validations/client.schema');
+const fournisseurSchema = require('../validations/fournisseur.schema');
 const { protect } = require('../middlewares/auth.middleware');
 
-router.use(protect); // Secure the routes
+router.use(protect); // All routes protected
 
 /**
  * @swagger
  * tags:
- *   name: Clients
- *   description: Client management
+ *   name: Fournisseurs
+ *   description: Fournisseur management
  */
 
 /**
  * @swagger
- * /api/clients:
+ * /api/fournisseurs:
  *   get:
- *     summary: Get all clients
- *     tags: [Clients]
+ *     summary: Get all fournisseurs
+ *     tags: [Fournisseurs]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: List of clients
+ *         description: List of fournisseurs
  */
-router.get('/', getAllClients);
+router.get('/', fournisseurController.getAllFournisseurs);
 
 /**
  * @swagger
- * /api/clients/{id}:
+ * /api/fournisseurs/{id}:
  *   get:
- *     summary: Get client by ID
- *     tags: [Clients]
+ *     summary: Get fournisseur by ID
+ *     tags: [Fournisseurs]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -50,18 +44,18 @@ router.get('/', getAllClients);
  *           type: integer
  *     responses:
  *       200:
- *         description: Client details
+ *         description: Fournisseur details
  *       404:
- *         description: Client not found
+ *         description: Fournisseur not found
  */
-router.get('/:id', getClientById);
+router.get('/:id', fournisseurController.getFournisseurById);
 
 /**
  * @swagger
- * /api/clients:
+ * /api/fournisseurs:
  *   post:
- *     summary: Create a new client
- *     tags: [Clients]
+ *     summary: Create a new fournisseur
+ *     tags: [Fournisseurs]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -69,19 +63,19 @@ router.get('/:id', getClientById);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Client'
+ *             $ref: '#/components/schemas/Fournisseur'
  *     responses:
  *       201:
  *         description: Created successfully
  */
-router.post('/', validate(clientSchema), createClient);
+router.post('/', validate(fournisseurSchema), fournisseurController.createFournisseur);
 
 /**
  * @swagger
- * /api/clients/{id}:
+ * /api/fournisseurs/{id}:
  *   put:
- *     summary: Update a client
- *     tags: [Clients]
+ *     summary: Update a fournisseur
+ *     tags: [Fournisseurs]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -95,19 +89,19 @@ router.post('/', validate(clientSchema), createClient);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Client'
+ *             $ref: '#/components/schemas/Fournisseur'
  *     responses:
  *       200:
  *         description: Updated successfully
  */
-router.put('/:id', validate(clientSchema), updateClient);
+router.put('/:id', validate(fournisseurSchema), fournisseurController.updateFournisseur);
 
 /**
  * @swagger
- * /api/clients/{id}:
+ * /api/fournisseurs/{id}:
  *   delete:
- *     summary: Delete a client
- *     tags: [Clients]
+ *     summary: Delete a fournisseur
+ *     tags: [Fournisseurs]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -120,6 +114,6 @@ router.put('/:id', validate(clientSchema), updateClient);
  *       200:
  *         description: Deleted successfully
  */
-router.delete('/:id', deleteClient);
+router.delete('/:id', fournisseurController.deleteFournisseur);
 
 module.exports = router;

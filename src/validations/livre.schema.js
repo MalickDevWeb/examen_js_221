@@ -6,7 +6,8 @@ const livreSchema = Joi.object({
   prix: Joi.number().positive().required(),
   stock: Joi.number().integer().min(0).default(0),
   image: Joi.string().allow('', null),
-  editeur: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required(),
+  editeurId: Joi.number().integer().required(),
 });
+
 
 module.exports = livreSchema;
