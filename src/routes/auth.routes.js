@@ -16,14 +16,14 @@ const { registerSchema, loginSchema } = require('../validations/auth.schema');
  * @swagger
  * /api/auth/register:
  *   post:
- *     summary: Register a new user
+ *     summary: Register
  *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             $ref: '#/components/schemas/UserCreate'
  *     responses:
  *       201:
  *         description: User registered successfully
@@ -36,14 +36,14 @@ router.post('/register', validate(registerSchema), authController.register);
  * @swagger
  * /api/auth/login:
  *   post:
- *     summary: Login user
+ *     summary: Login
  *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Auth'
+ *             $ref: '#/components/schemas/Body_login_api_auth_login_post'
  *     responses:
  *       200:
  *         description: User logged in successfully

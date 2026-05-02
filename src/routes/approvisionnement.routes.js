@@ -63,7 +63,7 @@ router.get('/:id', approvisionnementController.getApprovisionnementById);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Approvisionnement'
+ *             $ref: '#/components/schemas/ApprovisionnementCreate'
  *     responses:
  *       201:
  *         description: Created successfully

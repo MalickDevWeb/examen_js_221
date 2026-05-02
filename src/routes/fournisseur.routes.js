@@ -63,7 +63,7 @@ router.get('/:id', fournisseurController.getFournisseurById);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Fournisseur'
+ *             $ref: '#/components/schemas/FournisseurCreate'
  *     responses:
  *       201:
  *         description: Created successfully
@@ -89,7 +89,7 @@ router.post('/', validate(fournisseurSchema), fournisseurController.createFourni
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Fournisseur'
+ *             $ref: '#/components/schemas/FournisseurCreate'
  *     responses:
  *       200:
  *         description: Updated successfully
