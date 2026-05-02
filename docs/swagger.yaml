@@ -1,0 +1,92 @@
+openapi: 3.0.0
+info:
+  title: API Gestion Approvisionnement
+  description: API pour la gestion des approvisionnements d'une boutique.
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+    description: Serveur de développement
+
+paths:
+  /api/produits:
+    get:
+      summary: Liste tous les produits
+      responses:
+        '200':
+          description: Succès
+    post:
+      summary: Ajouter un produit
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                libelle:
+                  type: string
+                prix:
+                  type: number
+                quantiteStock:
+                  type: number
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Produit créé
+
+  /api/fournisseurs:
+    get:
+      summary: Liste tous les fournisseurs
+      responses:
+        '200':
+          description: Succès
+    post:
+      summary: Ajouter un fournisseur
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nom:
+                  type: string
+                adresse:
+                  type: string
+                telephone:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '201':
+          description: Fournisseur créé
+
+  /api/approvisionnements:
+    get:
+      summary: Liste tous les approvisionnements
+      responses:
+        '200':
+          description: Succès
+    post:
+      summary: Enregistrer un nouvel approvisionnement
+      description: Incrémente automatiquement le stock des produits concernés.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fournisseur:
+                  type: string
+                produits:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      produit:
+                        type: string
+                      quantite:
+                        type: number
+      responses:
+        '201':
+          description: Approvisionnement enregistré
